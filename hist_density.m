@@ -19,3 +19,5 @@ if ~exist('mz', 'var'), mz = 100; end
 bar(x, f/sum(f)/(x(2)-x(1)))
 
 end
+
+%hej
