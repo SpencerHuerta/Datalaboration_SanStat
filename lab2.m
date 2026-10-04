@@ -93,7 +93,7 @@ plot(ty, fy, 'r')
 hold off
 %test med annan kategori
 
-figure(6);
+figure(6); % alkoholvanor
 x2 = birth(birth(:, 26) < 2, 3); %visar vilka som inte röker
 y2 = birth(birth(:, 26) == 2, 3);% visar vilka som röker
 
@@ -108,7 +108,7 @@ hold on
 plot(ty2, fy2, 'r')
 hold off
 
-figure(7);
+figure(7); % lätt moder
 x3 = birth(birth(:, 23) < 1, 3); %visar vilka som inte röker
 y3 = birth(birth(:, 23) == 1, 3);% visar vilka som röker
 
