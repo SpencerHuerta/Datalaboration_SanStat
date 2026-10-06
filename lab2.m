@@ -126,6 +126,23 @@ hold off
 %% Problem 5: Test av normalitet
 figure(8);
 normplot(birth(:,3));
+
 figure(9);
 qqplot(birth(:,3));
-% gamma = 
+mu_births= mean(birth(:,3));
+s_births = std(birth(:,3),1);
+skyvheten_gamma = mean(((birth(:,3) - mu_births)/s_births).^3);
+kurtosisen_kappa = mean(((birth(:,3) - mu_births)/s_births).^4);
+
+n = numel(birth(:,3));
+Jacque_beras = (n/ 6) * (skyvheten_gamma ^ 2 + (1/4) * (kurtosisen_kappa-3)^2)
+
+
+%% Problem 6: Konfidensintervall för skillnad mellan väntevärden för födelsevikter
+
+x6 = birth(birth(:, 20) < 3, 3);
+
+y6 = birth(birth(:, 20) == 3, 3);
+fprintf("längden på x6 är " + length(x6) + " och längden på y6 är " + length(y6));
+
+mean(x6) - mean(y6)
