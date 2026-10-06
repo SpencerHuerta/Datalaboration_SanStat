@@ -145,4 +145,4 @@ x6 = birth(birth(:, 20) < 3, 3);
 y6 = birth(birth(:, 20) == 3, 3);
 fprintf("längden på x6 är " + length(x6) + " och längden på y6 är " + length(y6));
 
-mean(x6) - mean(y6)
+mean(x6) - mean(y6) % alltså mu_x - mu_y
