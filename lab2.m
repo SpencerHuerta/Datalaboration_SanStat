@@ -14,7 +14,7 @@ xbar = mean(x); %vektor med 100 medelvarden.x
 %Beraknar de undre och ovre granserna
 undre = xbar - norminv(1-alpha/2)*sigma/sqrt(n);
 ovre = xbar + norminv(1-alpha/2)*sigma/sqrt(n);
-%% Problem 1: Simulering av konfidensintervall (forts.)
+% Problem 1: Simulering av konfidensintervall (forts.)
 %Ritar upp alla intervall
 figure(1);
 hold on
@@ -145,4 +145,4 @@ x6 = birth(birth(:, 20) < 3, 3);
 y6 = birth(birth(:, 20) == 3, 3);
 fprintf("längden på x6 är " + length(x6) + " och längden på y6 är " + length(y6));
 
-mean(x6) - mean(y6) % alltså mu_x - mu_y
+mu_xy = mean(x6) - mean(y6) % alltså mu_x - mu_y
