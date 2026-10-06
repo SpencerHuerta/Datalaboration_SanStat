@@ -122,3 +122,10 @@ hold on
 [fy3, ty3] = ksdensity(y3);
 plot(ty3, fy3, 'r')
 hold off
+
+%% Problem 5: Test av normalitet
+figure(8);
+normplot(birth(:,3));
+figure(9);
+qqplot(birth(:,3));
+% gamma = 
