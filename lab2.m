@@ -1,4 +1,4 @@
-clf;
+close all;
 clc;
 clear;
 %% Problem 1: Simulering av konfidensintervall
@@ -14,9 +14,9 @@ xbar = mean(x); %vektor med 100 medelvarden.x
 %Beraknar de undre och ovre granserna
 undre = xbar - norminv(1-alpha/2)*sigma/sqrt(n);
 ovre = xbar + norminv(1-alpha/2)*sigma/sqrt(n);
-%% Problem 1: Simulering av konfidensintervall (forts.)
+% Problem 1: Simulering av konfidensintervall (forts.)
 %Ritar upp alla intervall
-figure(1)
+figure(1);
 hold on
 for k=1:100
     if ovre(k) < mu % Rodmarkerar intervall som missar mu
@@ -35,7 +35,7 @@ axis([b1 b2 0 101]) %Tar bort outnyttjat utrymme i figuren
 plot([mu mu],[0 101],'g')
 hold off
 %% Problem 2: Maximum likelihood/Minsta kvadrat
-clf;
+figure(2);
 M = 1e4;
 b = 4;
 x = raylrnd(b, M, 1);
@@ -48,6 +48,107 @@ plot(my_est_mk, 0, 'g*','MarkerSize',14)
 plot(b, 0, 'ro')
 plot(0:0.1:6, raylpdf(0:0.1:6, my_est_mk), 'r')
 hold off
+
+figure(3);
+plot(0:0.1:6, raylpdf(0:0.1:6, my_est_ml), 'r')
+hold off
+
+%% Problem 3: Konfidensintervall for Rayleighfordelning
+figure(4);
+load wave_data.mat
+subplot(3,1,1), plot(y(1:100))
+subplot(3,1,2), plot(y(1:end))
+subplot(3,1,3), hist_density(y)
+
+my_est = sqrt(2 / pi) * mean(y); % skattningen av b, mean(y) är skattningen av väntevärdet
+n = length(y); % hur många mätvärden det finns
+s = std(y); % matlabs inbyggda standardavvikelseberäknare
+alpha3 = 0.05;
+
+upper_bound = sqrt(2/pi) * (mean(y) + norminv(1-alpha3/2)*s/sqrt(n));
+lower_bound = sqrt(2/pi) * (mean(y) - norminv(1-alpha3/2)*s/sqrt(n));
+
+
+hold on % Gor sa att ploten halls kvar
+plot(lower_bound, 0, 'b*')
+plot(upper_bound, 0, 'g*')
+
+plot(0:0.1:6, raylpdf(0:0.1:6, my_est), 'r')
+hold off
+
+%% Problem 4: Fordelningar av givna data
+figure(5);
+load birth.dat
+% kategori 20 är rökning, 26 är alkoholvanor
+x = birth(birth(:, 20) < 3, 3); %visar vilka som inte röker
+y = birth(birth(:, 20) == 3, 3);% visar vilka som röker
+
+subplot(2,2,1), boxplot(x), % plotten visar kvartiler. det inom lådan är 50% av värdena. sen visar den outliers.
+axis([0 2 500 5000])
+subplot(2,2,2), boxplot(y),
+axis([0 2 500 5000])
+
+subplot(2,2,3:4), ksdensity(x), % ksdensity visar typ ett utjämnat histogram av hur vanligt det är
+hold on
+[fy, ty] = ksdensity(y);
+plot(ty, fy, 'r')
+hold off
+%test med annan kategori
+
+figure(6); % alkoholvanor
+x2 = birth(birth(:, 26) < 2, 3); %visar vilka som inte röker
+y2 = birth(birth(:, 26) == 2, 3);% visar vilka som röker
+
+subplot(2,2,1), boxplot(x2), % plotten visar kvartiler. det inom lådan är 50% av värdena. sen visar den outliers.
+axis([0 2 500 5000])
+subplot(2,2,2), boxplot(y2),
+axis([0 2 500 5000])
+
+subplot(2,2,3:4), ksdensity(x2), % ksdensity visar typ ett utjämnat histogram av hur vanligt det är
+hold on
+[fy2, ty2] = ksdensity(y2);
+plot(ty2, fy2, 'r')
+hold off
+
+figure(7); % lätt moder
+x3 = birth(birth(:, 23) < 1, 3); %visar vilka som inte röker
+y3 = birth(birth(:, 23) == 1, 3);% visar vilka som röker
+
+subplot(2,2,1), boxplot(x3), % plotten visar kvartiler. det inom lådan är 50% av värdena. sen visar den outliers.
+axis([0 2 500 5000])
+subplot(2,2,2), boxplot(y3),
+axis([0 2 500 5000])
+
+subplot(2,2,3:4), ksdensity(x3), % ksdensity visar typ ett utjämnat histogram av hur vanligt det är
+hold on
+[fy3, ty3] = ksdensity(y3);
+plot(ty3, fy3, 'r')
+hold off
+
+%% Problem 5: Test av normalitet
+figure(8);
+normplot(birth(:,3));
+
+figure(9);
+qqplot(birth(:,3));
+mu_births= mean(birth(:,3));
+s_births = std(birth(:,3),1);
+skyvheten_gamma = mean(((birth(:,3) - mu_births)/s_births).^3);
+kurtosisen_kappa = mean(((birth(:,3) - mu_births)/s_births).^4);
+
+n = numel(birth(:,3));
+Jacque_beras = (n/ 6) * (skyvheten_gamma ^ 2 + (1/4) * (kurtosisen_kappa-3)^2)
+
+
+%% Problem 6: Konfidensintervall för skillnad mellan väntevärden för födelsevikter
+
+x6 = birth(birth(:, 20) < 3, 3);
+
+y6 = birth(birth(:, 20) == 3, 3);
+fprintf("längden på x6 är " + length(x6) + " och längden på y6 är " + length(y6));
+
+mu_xy = mean(x6) - mean(y6) % alltså mu_x - mu_y
+
 
 %% Problem 7: enkel linjär regression
 clf;
