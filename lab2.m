@@ -137,7 +137,7 @@ skyvheten_gamma = mean(((birth(:,3) - mu_births)/s_births).^3);
 kurtosisen_kappa = mean(((birth(:,3) - mu_births)/s_births).^4);
 
 n = numel(birth(:,3));
-Jacque_beras = (n/ 6) * (skyvheten_gamma ^ 2 + (1/4) * (kurtosisen_kappa-3)^2)
+Jacque_beras = (n/ 6) * (skyvheten_gamma ^ 2 + (1/4) * (kurtosisen_kappa-3)^2);
 
 nx = numel(x3);
 ny = numel(y3);
@@ -175,7 +175,6 @@ ovre6  = skillnad + z*standardfel;
 
 
 
-
 fprintf('Antal: icke-rökande = %d, rökande = %d\n', nx, ny);
 fprintf('Skattad skillnad: %.1f gram\n', skillnad);
 fprintf('95%% konfidensintervall: [%.1f, %.1f] gram\n', ...
@@ -189,13 +188,10 @@ else
     fprintf('Ingen signifikant skillnad på 5%%-nivån.\n');
 end
 
-mu_xy = mean(x6) - mean(y6) % alltså mu_x - mu_y
 
 
 %% Problem 7: enkel linjär regression
-clf;
-clc;
-clear;
+
 load moore.dat
 
 X = ones(length(moore),2);
@@ -203,13 +199,13 @@ X(:,2) = moore(:,1);
 y = log(moore(:,2));
 [beta_hat,n1,n2,n3,stats] = regress(y,X);
 fprintf('R2 = %.5f\n',stats(1))
-fprintf('Antalet uppskattaddae transistorer år 2025: %.2f\n',exp([1,2025]*beta_hat))
-figure(1);
+fprintf('Antalet uppskattade transistorer år 2025: %.2f\n',exp([1,2025]*beta_hat))
+figure(10);
 hold on
 plot((X*beta_hat),X(:,2),'r')
 plot(y,X(:,2),'g*')
 hold off
-figure(2);
+figure(11);
 w=y;
 res = w-X*beta_hat;
 subplot(2,1,1), normplot(res)
