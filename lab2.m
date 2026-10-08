@@ -137,12 +137,52 @@ kurtosisen_kappa = mean(((birth(:,3) - mu_births)/s_births).^4);
 n = numel(birth(:,3));
 Jacque_beras = (n/ 6) * (skyvheten_gamma ^ 2 + (1/4) * (kurtosisen_kappa-3)^2)
 
+nx = numel(x3);
+ny = numel(y3);
+[hx, px] = jbtest(x3, 0.05);
+[hy, py] = jbtest(y3, 0.05);
+
+
+fprintf('Jarque–Bera: h = %d, p = %.4g\n', hx, px);
+fprintf('Jarque–Bera: h = %d, p = %.4g\n', hy, py);
+% h = 1 betyder att nollhypotesen förkastas på 5%-nivån och det inte är
+% normalfördelat.
+
 
 %% Problem 6: Konfidensintervall för skillnad mellan väntevärden för födelsevikter
 
 x6 = birth(birth(:, 20) < 3, 3);
 
 y6 = birth(birth(:, 20) == 3, 3);
-fprintf("längden på x6 är " + length(x6) + " och längden på y6 är " + length(y6));
 
-mu_xy = mean(x6) - mean(y6) % alltså mu_x - mu_y
+skillnad = mean(x6) - mean(y6) % alltså mu_x - mu_y
+
+nx = length(x6);
+ny = length(y6);
+
+sx = std(x6);
+sy = std(y6);
+
+standardfel = sqrt(sx^2/nx + sy^2/ny);
+
+alpha = 0.05;
+z = norminv(1 - alpha/2);
+
+undre6 = skillnad - z*standardfel;
+ovre6  = skillnad + z*standardfel;
+
+
+
+
+fprintf('Antal: icke-rökande = %d, rökande = %d\n', nx, ny);
+fprintf('Skattad skillnad: %.1f gram\n', skillnad);
+fprintf('95%% konfidensintervall: [%.1f, %.1f] gram\n', ...
+    undre6, ovre6);
+
+if undre6 > 0
+    fprintf('Signifikant skillnad: högre medelvikt i gruppen icke-rökande.\n');
+elseif ovre6 < 0
+    fprintf('Signifikant skillnad: lägre medelvikt i gruppen icke-rökande.\n');
+else
+    fprintf('Ingen signifikant skillnad på 5%%-nivån.\n');
+end
